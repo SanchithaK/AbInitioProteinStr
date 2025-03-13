@@ -59,6 +59,11 @@ AbInitioPS/
 - **AppUI.R**: RShiny application for sequence input and visualization.
 - **auto_Validation.R**: RShiny tool for validating model predictions.
 - **AccuracyTestDataset_50.csv**: Dataset used for model validation.
+- **GOR_InfoVals/**: Contains CSV files with informational values for different secondary structure types (e.g., Helix, Strand, Turn, Coil).
+- **GORTests/GORPredict/Input/**: Input test files for GOR prediction module.
+- **GORTests/GORPredict/Output/**: Output test files for GOR prediction module.
+- **GORTests/SlideWindow/Input/**: Input test files for sliding window functions.
+- **GORTests/SlideWindow/Output/**: Output test files for sliding window functions.
 
 ## Building and Running the Go Code
 ### Prerequisites
@@ -120,7 +125,7 @@ go test -v CF_functions_test.go
    - Graphical comparisons of precision, recall, and F1-score.
 
 ## Overview of Algorithms
-### Chou-Fasman Algorithm
+### Chou-Fasman (CF) Algorithm
 A sliding window-based method that assigns **propensity scores** to amino acids, identifying helix and sheet nucleation sites. Overlapping predictions are resolved based on higher propensity values.
 
 ### Garnier-Osguthorpe-Robson (GOR) Algorithm
@@ -128,6 +133,19 @@ Uses **information theory** to evaluate each amino acid's likelihood of forming 
 
 ### Hidden Markov Model (HMM)
 Models protein structures as **hidden states** in a Markov chain. **Viterbi decoding** is used to determine the most likely sequence of secondary structures based on trained **transition and emission probabilities**.
+
+### Mechanisms of CF and GOR Models
+
+<img width="618" alt="CF" src="https://github.com/user-attachments/assets/7fbca064-8ea0-4c59-b2f9-558c8fa28ff0" />
+**Figure 1**: This figure outlines the Chou-Fasman algorithm for secondary structure prediction in proteins, skipping certain steps for simplicity. It illustrates:
+a: Identifying favorable α-helix nucleation sites, b: Extending the helix window based on propensity scores, c: Locating favorable β-sheet nucleation sites, d: Using a sliding window to search for additional nucleation sites (unfavorable in this case), e: Searching for turn regions (propensity scores omitted), f: Marking favorable turn regions, g: Updating the predicted structure with identified regions, h: Resolving overlaps between predicted structures based on higher propensity scores.
+
+
+<img width="625" alt="GOR1" src="https://github.com/user-attachments/assets/41858bc1-3cd0-4912-9a0f-1e7c03369fa2" />
+**Figure 2**: This figure demonstrates the calculation of information values using probabilities to predict the likelihood of an amino acid being part of a specific structural segment. The example focuses on residue Ala at position -2 in an α-helix, showing how probabilities are derived and combined to calculate the information measure (I(H, A, -2) ≈ 50). The table below provides directional information measures for various amino acids at different positions relative to the α-helical conformation.
+
+<img width="629" alt="GOR2" src="https://github.com/user-attachments/assets/03d8185c-d742-4b8e-b796-fd3f475ea409" />
+**Figure 3**: This figure provides a step-by-step calculation of structural information scores using the GOR method to predict secondary structures. It highlights: The sequence window around residue Ala at position -2, Directional information values from Table 1 for residues in the window, Summing individual contributions to calculate the total score (105), which supports predicting an α-helix at this position.
 
 ## Model Performance and Validation
 ### Accuracy
@@ -153,5 +171,5 @@ Models protein structures as **hidden states** in a Markov chain. **Viterbi deco
 4. Kabsch, W., & Sander, C. (1983). DSSP: Dictionary of Protein Secondary Structure.
 5. McDonough, M. (2024). Did AI solve the protein-folding problem? Harvard Medicine Magazine.
 
-This README provides an in-depth overview of our project, its methodologies, and execution details. 🚀
+
 
